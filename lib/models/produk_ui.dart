@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'produk_service.dart';
+import '../services/produk_service.dart';
 
 class ProdukUI extends StatefulWidget {
   const ProdukUI({super.key});

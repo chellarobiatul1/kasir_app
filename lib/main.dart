@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:kasir_app/screens/dashboard_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'produk_ui.dart';
+import 'screens/login_screen.dart';
+import 'screens/signup_screen.dart';
+import 'models/produk_ui.dart'; // kalau nanti butuh
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +25,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const ProdukUI(),
+
+      home: const LoginScreen(),
+
+      routes: {
+        '/dashboard': (context) => const DashboardScreen(),
+        '/produk': (context) => const ProdukUI(),
+        '/signup': (context) => const SignupScreen(),
+      },
     );
   }
 }
+
