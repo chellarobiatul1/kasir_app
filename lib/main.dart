@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kasir_app/screens/dashboard_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'screens/login_screen.dart';
+import 'screens/welcome_screen.dart';
 import 'screens/signup_screen.dart';
-import 'models/produk_ui.dart'; // kalau nanti butuh
-
+import 'screens/login_screen.dart';
+import 'models/produk_ui.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,14 +26,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
 
-      home: const LoginScreen(),
+      home: const WelcomeScreen(),  // bisa jadi LoginScreen atau WelcomeScreen sesuai flow
 
       routes: {
+        '/login': (context) => const LoginScreen(),
+        '/signup': (context) => const SignupScreen(),
         '/dashboard': (context) => const DashboardScreen(),
         '/produk': (context) => const ProdukUI(),
-        '/signup': (context) => const SignupScreen(),
+        '/welcome': (context) => const WelcomeScreen(),
       },
     );
   }
 }
-

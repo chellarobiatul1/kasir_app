@@ -14,7 +14,7 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFC1DDB0),
+      backgroundColor: const Color.fromARGB(255, 199, 230, 179),
 
       body: SingleChildScrollView(
         child: Padding(
@@ -175,20 +175,23 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: 60),
 
-              // 🔥 Tombol Sign Up
+              // 🔥 Tombol Sign Up (diubah agar navigasi ke login)
               SizedBox(
-                width: 250,
-                height: 50,
+                width: 300,
+                height: 46,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 35, 115, 21),
+                    backgroundColor: const Color.fromARGB(255, 28, 78, 19),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    // Navigasi ke halaman login ketika tombol Sign-up ditekan
+                    Navigator.pushNamed(context, "/login");
+                  },
                   child: const Text(
                     "sign-up",
                     style: TextStyle(
@@ -201,7 +204,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
 
-              const SizedBox(height: 25),
+              const SizedBox(height: 50),
 
               // 🔥 Teks Login
               Row(

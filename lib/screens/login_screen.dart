@@ -1,140 +1,207 @@
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool _obscurePassword = true;
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFC1DDB0),
+      backgroundColor: const Color.fromARGB(255, 199, 230, 179),
 
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height:120),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
 
-            // 🔥 LOGO DAUN
-            Transform.translate(
-               offset: const Offset(61, 38), // (x = kanan, y = turun)
-               child: Image.asset(
-                "assets/images/logo_daun.png",
-                height: 80
+              const SizedBox(height: 20),
+
+              // LOGO DAUN
+              Transform.translate(
+                offset: const Offset(61, 38),
+                child: Image.asset(
+                  "assets/images/logo_daun.png",
+                  height: 80,
                 ),
-                ),
-
-            const SizedBox(height: 0),
-
-            // 🔥 TEXT VEGMART
-            const Text(
-              "VegMart.ID",
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF4A6C38),
               ),
-              textAlign: TextAlign.center,
-            ),
 
-            const SizedBox(height: 80),
+              const SizedBox(height: 0),
 
-            // 🔥 LOGO BESAR DI TENGAH
-            Center(
-              child: Container(
-                height: 200,
-                width: 200,
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 250, 254, 246),
-                  shape: BoxShape.circle,
+              // TEXT VEGMART
+              const Text(
+                "VegMart.ID",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
-                child: Center(
-                  child: Image.asset(
-                    "assets/images/logo_vegmart.png",
-                    height: 100,
+              ),
+
+              const SizedBox(height: 80),
+
+              // Judul Login
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Login to your Account",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-            ),
 
-            // 🔥 JARAK DITURUNKAN (dari 100 → 160)
-            const SizedBox(height: 90),
+              const SizedBox(height: 30),
 
-            // 🔥 TAGLINE — POSISI LEBIH KE BAWAH
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                "“Segar setiap hari, sehat sepanjang hari”",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontFamily: 'Poppins',
+              // Username / Email
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "username",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Poppins',
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                textAlign: TextAlign.center,
               ),
-            ),
+              const SizedBox(height: 5),
 
-            // 🔥 JARAK DI BAWAH KE LOGIN (tetap 60)
-            const SizedBox(height: 80),
+              TextField(
+                controller: emailController,
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  hintText: "email..",
+                  hintStyle: const TextStyle(color: Color.fromARGB(255, 125, 124, 124)),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+              ),
 
-            // 🔥 LOGIN BUTTON
-            Center(
-              child: SizedBox(
-                width: 250,
-                height: 50,
+              const SizedBox(height: 20),
+
+              // Password
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "password",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Poppins',
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 5),
+
+              TextField(
+                controller: passwordController,
+                obscureText: _obscurePassword,
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                  hintText: "password..",
+                  hintStyle: const TextStyle(color: Color.fromARGB(255, 125, 124, 124)),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.grey,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 60),
+
+              // Tombol Login
+              SizedBox(
+                width: 300,
+                height: 46,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF5B6E33),
+                    backgroundColor: const Color.fromARGB(255, 28, 78, 19),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, "/login-form");
+                    Navigator.pushReplacementNamed(context, '/dashboard');
                   },
                   child: const Text(
                     "login",
                     style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 22,
                       color: Colors.white,
                       fontFamily: 'Poppins',
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
               ),
-            ),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 50),
 
-            // 🔥 SIGNUP BUTTON
-            Center(
-              child: SizedBox(
-                width: 250,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF5B6E33),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, "/signup");
-                  },
-                  child: const Text(
-                    "sign-up",
+              // Arah ke Signup
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Don't have an account ? ",
                     style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.white,
                       fontFamily: 'Poppins',
+                      fontSize: 13,
                     ),
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, "/signup");
+                    },
+                    child: const Text(
+                      "Sign up",
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 13,
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
 
-            const SizedBox(height: 50),
-          ],
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
     );
