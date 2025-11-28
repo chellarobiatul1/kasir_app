@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:kasir_app/screens/home_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -13,6 +14,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool isTransactionExpanded = false;
   bool isStockExpanded = false;
 
+  PageController chartController = PageController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,25 +24,50 @@ class _DashboardScreenState extends State<DashboardScreen> {
       appBar: AppBar(
         backgroundColor: const Color(0xFFD9E8C5),
         elevation: 0,
-        toolbarHeight: 85,
-        leadingWidth: 130,
+        toolbarHeight: 150,
+        leadingWidth: 260,
+
         leading: Padding(
-          padding: const EdgeInsets.only(left: 12, top: 18),
+          padding: const EdgeInsets.only(left: 30, top: 5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                "VegMart",
+            children: [
+              Transform.translate(
+                offset: const Offset(40, 25),
+                child: Image.asset("assets/images/logo_daun.png", height: 50),
+              ),
+              const SizedBox(height: 2),
+              const Text(
+                "VegMart.ID",
                 style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
+                  fontFamily: 'Poppins',
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF4A6C38),
                 ),
               ),
-              Text(
+              const Text(
                 "Your Dashboard",
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
+                  fontFamily: 'Poppins',
+                  fontSize: 25,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                chartController.hasClients
+                    ? (chartController.page?.round() == 0
+                          ? "Grafik Harian"
+                          : chartController.page?.round() == 1
+                          ? "Grafik Mingguan"
+                          : "Grafik Bulanan")
+                    : "Grafik Harian",
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
                 ),
               ),
             ],
@@ -47,115 +75,442 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         actions: const [
           Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Icon(Icons.notifications_outlined, color: Colors.black, size: 28),
+            padding: EdgeInsets.only(right: 40),
+            child: Icon(
+              Icons.notifications_outlined,
+              color: Colors.black,
+              size: 40,
+            ),
           ),
         ],
       ),
 
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: SizedBox.expand(
+        child: Stack(
           children: [
-            const Text("grafik hari ini", style: TextStyle(fontSize: 14)),
-            const SizedBox(height: 10),
-            _buildChart(),
-            const SizedBox(height: 20),
-            _buildCardHeader(
-              icon: Icons.person_outline,
-              title: "Total Pelanggan Aktif",
-              value: "6",
-              expanded: isCustomerExpanded,
-              onTap: () => setState(() => isCustomerExpanded = !isCustomerExpanded),
+            SingleChildScrollView(
+              padding: const EdgeInsets.all(18),
+              child: Column(
+                children: [
+                  _buildChartCarousel(),
+                  const SizedBox(height: 20),
+                  _buildCardHeader(
+                    icon: Icons.person_outline,
+                    title: "Customer Aktif",
+                    value: "6",
+                    expanded: isCustomerExpanded,
+                    onTap: () {
+                      setState(() => isCustomerExpanded = !isCustomerExpanded);
+                    },
+                  ),
+                  if (isCustomerExpanded) _buildCustomerList(),
+                  const SizedBox(height: 40),
+                  _buildCardHeader(
+                    icon: Icons.shopping_cart_outlined,
+                    title: "Transaksi Hari Ini",
+                    value: "4",
+                    expanded: isTransactionExpanded,
+                    onTap: () {
+                      setState(
+                        () => isTransactionExpanded = !isTransactionExpanded,
+                      );
+                    },
+                  ),
+                  if (isTransactionExpanded) _buildTransactionList(),
+                  const SizedBox(height: 40),
+                  _buildCardHeader(
+                    icon: Icons.inventory_2_outlined,
+                    title: "Stok Barang",
+                    value: "6",
+                    expanded: isStockExpanded,
+                    onTap: () {
+                      setState(() => isStockExpanded = !isStockExpanded);
+                    },
+                  ),
+                  if (isStockExpanded) _buildStockList(),
+                  const SizedBox(height: 80),
+                ],
+              ),
             ),
-            if (isCustomerExpanded) _buildCustomerList(),
-            const SizedBox(height: 15),
-            _buildCardHeader(
-              icon: Icons.receipt_long_outlined,
-              title: "Daftar Transaksi Baru",
-              value: "4",
-              expanded: isTransactionExpanded,
-              onTap: () => setState(() => isTransactionExpanded = !isTransactionExpanded),
+
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: SafeArea(
+                top: false,
+                child: Container(
+  height: 60,
+  decoration: BoxDecoration(
+    color: Colors.white,
+    boxShadow: const [
+      BoxShadow(
+        color: Colors.black26,
+        blurRadius: 6,
+        offset: Offset(0, -3),
+      ),
+    ],
+    borderRadius: const BorderRadius.only(
+      topLeft: Radius.circular(12),
+      topRight: Radius.circular(12),
+    ),
+  ),
+
+  child: Row(
+  mainAxisAlignment: MainAxisAlignment.spaceAround,
+  children: [
+    GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+      },
+      child: const Icon(Icons.home_outlined, size: 28),
+    ),
+    const Icon(Icons.menu_book_outlined, size: 28),
+    const Icon(Icons.person_outline, size: 28),
+    const Icon(Icons.dashboard_outlined, size: 28),
+    const Icon(Icons.access_time, size: 28),
+    const Icon(Icons.settings_outlined, size: 28),
+  ],
+),
+
+),
+              ),
             ),
-            if (isTransactionExpanded) _buildTransactionList(),
-            const SizedBox(height: 15),
-            _buildCardHeader(
-              icon: Icons.inventory_2_outlined,
-              title: "Total Stok Produk",
-              value: "15 kg",
-              expanded: isStockExpanded,
-              onTap: () => setState(() => isStockExpanded = !isStockExpanded),
-            ),
-            if (isStockExpanded) _buildStockList(),
-            const SizedBox(height: 20),
           ],
         ),
-      ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.black54,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.people_alt_outlined), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.receipt_long_outlined), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.inventory_outlined), label: ""),
-          BottomNavigationBarItem(icon: Icon(Icons.settings_outlined), label: ""),
-        ],
       ),
     );
   }
 
-  Widget _buildChart() {
-    return Container(
-      height: 180,
-      decoration: BoxDecoration(
-        color: const Color(0xFF3D5F3D),
-        borderRadius: BorderRadius.circular(14),
+  // ------------------------------------------------------------
+  // ⭐ CHART CAROUSEL
+  // ------------------------------------------------------------
+  Widget _buildChartCarousel() {
+    return SizedBox(
+      height: 200,
+      child: PageView(
+        controller: chartController,
+        onPageChanged: (_) => setState(() {}),
+        children: [_buildBarChart(), _buildLineChart(), _buildAreaChart()],
       ),
-      padding: const EdgeInsets.all(12),
-      child: BarChart(
-        BarChartData(
+    );
+  }
+
+  // ------------------------------------------------------------
+  // BAR CHART
+  // ------------------------------------------------------------
+  Widget _buildBarChart() {
+  return Container(
+    margin: const EdgeInsets.only(right: 10),
+    decoration: BoxDecoration(
+      color: const Color(0xFF2F4A2F), // hijau gelap seperti gambar
+      borderRadius: BorderRadius.circular(14),
+    ),
+    padding: const EdgeInsets.all(12),
+    child: BarChart(
+      BarChartData(
+        minY: 0,
+        maxY: 6,
+        gridData: const FlGridData(show: false),
+        borderData: FlBorderData(show: false),
+
+        titlesData: FlTitlesData(
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              interval: 1,
+              getTitlesWidget: (value, meta) => Text(
+                value.toInt().toString(),
+                style: const TextStyle(color: Colors.white, fontSize: 12),
+              ),
+              reservedSize: 20,
+            ),
+          ),
+          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              interval: 1,
+              getTitlesWidget: (value, meta) {
+                const labels = ["cabe", "gula", "wortel", "penyedap", "kunir"];
+                if (value.toInt() < labels.length) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      labels[value.toInt()],
+                      style: const TextStyle(color: Colors.white, fontSize: 11),
+                    ),
+                  );
+                }
+                return const SizedBox();
+              },
+            ),
+          ),
+        ),
+
+        barGroups: List.generate(5, (i) {
+          final tinggi = [4, 5, 6, 4, 3][i].toDouble();
+
+          return BarChartGroupData(
+            x: i,
+            barRods: [
+              BarChartRodData(
+                toY: tinggi,
+                width: 22,
+                borderRadius: BorderRadius.circular(20),
+
+                // efek batang kaca
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [
+                    Colors.white.withOpacity(0.25),
+                    Colors.white.withOpacity(0.65),
+                  ],
+                ),
+
+                // lingkaran putih di atas batang
+                rodStackItems: [
+                  BarChartRodStackItem(
+                    tinggi - 0.1,
+                    tinggi,
+                    Colors.white,
+                  )
+                ],
+              ),
+            ],
+          );
+        }),
+      ),
+    ),
+  );
+}
+
+  // ------------------------------------------------------------
+  // LINE CHART
+  // ------------------------------------------------------------
+  Widget _buildLineChart() {
+    return Container(
+      margin: const EdgeInsets.only(right: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 6,
+            offset: const Offset(2, 3),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(16),
+      child: LineChart(
+        LineChartData(
+          minY: 0,
+          maxY: 100,
+          gridData: const FlGridData(show: false),
           borderData: FlBorderData(show: false),
           titlesData: FlTitlesData(
-            leftTitles: AxisTitles(),
-            topTitles: AxisTitles(),
-            rightTitles: AxisTitles(),
+            topTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            rightTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                interval: 20,
+                reservedSize: 30,
+                getTitlesWidget: (value, meta) => Text(
+                  value.toInt().toString(),
+                  style: const TextStyle(color: Colors.black, fontSize: 12),
+                ),
+              ),
+            ),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
                 interval: 1,
                 getTitlesWidget: (value, meta) {
-                  const labels = ["cabe", "gula", "wortel", "penyedap", "kunir"];
-                  if (value.toInt() >= 0 && value.toInt() < labels.length) {
-                    return Text(labels[value.toInt()],
-                      style: const TextStyle(fontSize: 10, color: Colors.white));
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(
+                      (value.toInt() + 1).toString(),
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          lineBarsData: [
+            LineChartBarData(
+              spots: const [
+                FlSpot(0, 40),
+                FlSpot(1, 65),
+                FlSpot(2, 70),
+                FlSpot(3, 50),
+                FlSpot(4, 68),
+                FlSpot(5, 60),
+                FlSpot(6, 80),
+                FlSpot(7, 78),
+                FlSpot(8, 95),
+                FlSpot(9, 60),
+                FlSpot(10, 88),
+                FlSpot(11, 85),
+              ],
+              isCurved: true,
+              color: Colors.black,
+              barWidth: 2.5,
+              dotData: FlDotData(
+                show: true,
+                getDotPainter: (spot, percent, barData, index) {
+                  return FlDotCirclePainter(
+                    radius: 4,
+                    color: Colors.black,
+                    strokeWidth: 0,
+                  );
+                },
+              ),
+              belowBarData: BarAreaData(
+                show: true,
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.green.shade900.withOpacity(0.6),
+                    Colors.green.shade900.withOpacity(0.2),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ------------------------------------------------------------
+  // AREA CHART
+  // ------------------------------------------------------------
+  Widget _buildAreaChart() {
+    return Container(
+      margin: const EdgeInsets.only(right: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 6,
+            offset: const Offset(2, 3),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(16),
+      child: LineChart(
+        LineChartData(
+          minY: 0,
+          maxY: 100,
+          gridData: const FlGridData(show: false),
+          borderData: FlBorderData(show: false),
+          titlesData: FlTitlesData(
+            topTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            rightTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                interval: 20,
+                reservedSize: 30,
+                getTitlesWidget: (value, meta) => Text(
+                  value.toInt().toString(),
+                  style: const TextStyle(color: Colors.black, fontSize: 12),
+                ),
+              ),
+            ),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                interval: 1,
+                getTitlesWidget: (value, meta) {
+                  const days = [
+                    "senin",
+                    "selasa",
+                    "rabu",
+                    "kamis",
+                    "jumat",
+                    "sabtu",
+                    "minggu",
+                  ];
+                  if (value.toInt() >= 0 && value.toInt() < days.length) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: Text(
+                        days[value.toInt()],
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    );
                   }
                   return const SizedBox();
                 },
               ),
             ),
           ),
-          barGroups: List.generate(5, (index) {
-            return BarChartGroupData(
-              x: index,
-              barRods: [
-                BarChartRodData(
-                  toY: (4 + index).toDouble(),
-                  color: Colors.white,
-                  width: 14,
-                  borderRadius: BorderRadius.circular(4),
-                ),
+          lineBarsData: [
+            LineChartBarData(
+              spots: const [
+                FlSpot(0, 60),
+                FlSpot(1, 50),
+                FlSpot(2, 55),
+                FlSpot(3, 75),
+                FlSpot(4, 80),
+                FlSpot(5, 82),
+                FlSpot(6, 95),
               ],
-            );
-          }),
+              isCurved: true,
+              color: Colors.black,
+              barWidth: 2.5,
+              dotData: FlDotData(
+                show: true,
+                getDotPainter: (spot, percent, barData, index) {
+                  return FlDotCirclePainter(
+                    radius: 4,
+                    color: Colors.black,
+                    strokeWidth: 0,
+                  );
+                },
+              ),
+              belowBarData: BarAreaData(
+                show: true,
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.green.shade700.withOpacity(0.4),
+                    Colors.green.shade700.withOpacity(0.1),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
+  // ------------------------------------------------------------
+  // CARD HEADER
+  // ------------------------------------------------------------
   Widget _buildCardHeader({
     required IconData icon,
     required String title,
@@ -166,10 +521,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 70,
+        width: double.infinity,
+        height: 110,
         padding: const EdgeInsets.symmetric(horizontal: 18),
         decoration: BoxDecoration(
-          color: const Color(0xFFE8F0D5),
+          color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: const [
             BoxShadow(
@@ -179,23 +535,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ],
         ),
-        child: Row(
-          children: [
-            Icon(icon, size: 28, color: Colors.black),
-            const SizedBox(width: 14),
-            Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-            const Spacer(),
-            Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(width: 10),
-            Icon(expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down, size: 26),
-          ],
-        ),
-      ),
-    );
-  }
+       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween, // sesuaikan jika mau spasi otomatis
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center, // ikon & teks vertikal center
+            crossAxisAlignment: CrossAxisAlignment.center, // horizontal center
+            children: [
+              Icon(icon, size: 28, color: Colors.black),
+              const SizedBox(height: 4), // jarak antara ikon & teks
+              Text(
+                title,
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+                ],
+                ),
+                const Spacer(),
+                Text(
+                  value,
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 10),
+                  Icon(
+                    expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                    size: 26,
+                    )
+                    ],
+                    ),
+                     ),
+                     );}
 
+  // ------------------------------------------------------------
+  // LIST CUSTOMER
+  // ------------------------------------------------------------
   Widget _buildCustomerList() {
-    final customers = ["Chella", "Rotul", "Zahra", "Nadya", "Melati", "Clarissa"];
+    final customers = [
+      "Chella",
+      "Rotul",
+      "Zahra",
+      "Nadya",
+      "Melati",
+      "Clarissa",
+    ];
 
     return Container(
       margin: const EdgeInsets.only(top: 8),
@@ -226,6 +608,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  // ------------------------------------------------------------
+  // LIST TRANSAKSI
+  // ------------------------------------------------------------
   Widget _buildTransactionList() {
     final items = ["Chella", "Rotul", "Zahra", "Melati"];
 
@@ -249,6 +634,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  // ------------------------------------------------------------
+  // LIST STOK
+  // ------------------------------------------------------------
   Widget _buildStockList() {
     final stock = {
       "Bawang Putih": "13kg",

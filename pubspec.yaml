@@ -30,3 +30,9 @@ flutter:
   assets:
     - assets/images/logo_vegmart.png
     - assets/images/logo_daun.png
+    - assets/images/SAYUR.jpg
+    - assets/images/BUAH.jpg
+    - assets/images/REMPAH.webp
+    - assets/images/PELENGKAP.jpg
+    
+

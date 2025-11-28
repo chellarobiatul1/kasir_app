@@ -70,7 +70,7 @@ class _SignupScreenState extends State<SignupScreen> {
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "username",
+                  "email",
                   style: TextStyle(
                     color: Color.fromARGB(255, 255, 255, 255),
                     fontFamily: 'Poppins',

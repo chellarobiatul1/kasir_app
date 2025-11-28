@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kasir_app/models/kategori.dart';
 import 'package:kasir_app/screens/dashboard_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'screens/welcome_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/login_screen.dart';
-import 'models/produk_ui.dart';
+import 'models/produk_per_kategori.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,13 +27,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
 
-      home: const WelcomeScreen(),  // bisa jadi LoginScreen atau WelcomeScreen sesuai flow
+      home:
+          const WelcomeScreen(), // bisa jadi LoginScreen atau WelcomeScreen sesuai flow
 
       routes: {
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignupScreen(),
         '/dashboard': (context) => const DashboardScreen(),
-        '/produk': (context) => const ProdukUI(),
+        '/produk': (context) => const ProdukPerKategori(kategori: "sayur",),
         '/welcome': (context) => const WelcomeScreen(),
       },
     );
