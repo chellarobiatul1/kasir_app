@@ -1,4 +1,4 @@
-import '../models/kategori.dart';
+import '../models/kategori_model.dart';
 
 class KategoriService {
   // Method untuk mengambil list kategori

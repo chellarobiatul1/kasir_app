@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kasir_app/models/kategori.dart';
-import 'package:kasir_app/screens/dashboard_screen.dart';
+import 'package:kasir_app/models/kategori_model.dart';
+import 'package:kasir_app/screens/home/dashboard_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'screens/welcome_screen.dart';
-import 'screens/signup_screen.dart';
-import 'screens/login_screen.dart';
-import 'models/produk_per_kategori.dart';
+import 'screens/home/welcome_screen.dart';
+import 'screens/auth/signup_screen.dart';
+import 'screens/auth/login_screen.dart';
+import 'models/produk_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

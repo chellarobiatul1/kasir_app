@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/produk_per_kategori.dart'; // ⬅️ SESUAIKAN PATH FILE PRODUK
+import '../../models/produk_model.dart'; // ⬅️ SESUAIKAN PATH FILE PRODUK
 
 class KategoriCard extends StatefulWidget {
   final String title;

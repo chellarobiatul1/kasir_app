@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kasir_app/screens/kasir/home_screen.dart';
 import 'package:kasir_app/services/kategori_service.dart';
-import 'package:kasir_app/widgets/kategori_card.dart';
-import 'package:kasir_app/models/kategori.dart';
+import 'package:kasir_app/widgets/cards/kategori_card.dart';
+import 'package:kasir_app/models/kategori_model.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class ManagemenProduk extends StatelessWidget {
+  const ManagemenProduk({super.key});
 
   @override
   Widget build(BuildContext context) {

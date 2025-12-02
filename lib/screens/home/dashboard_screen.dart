@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:kasir_app/screens/home_screen.dart';
-
+import 'package:kasir_app/screens/kasir/home_screen.dart';
+import 'package:kasir_app/screens/laporan/laporan_kasir.dart';
+import 'package:kasir_app/screens/pelanggan/daftar_pelanggan.dart';
+import 'package:kasir_app/screens/settings_page.dart';
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -140,43 +142,92 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: SafeArea(
                 top: false,
                 child: Container(
-  height: 60,
-  decoration: BoxDecoration(
-    color: Colors.white,
-    boxShadow: const [
-      BoxShadow(
-        color: Colors.black26,
-        blurRadius: 6,
-        offset: Offset(0, -3),
-      ),
-    ],
-    borderRadius: const BorderRadius.only(
-      topLeft: Radius.circular(12),
-      topRight: Radius.circular(12),
-    ),
-  ),
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 6,
+                        offset: Offset(0, -3),
+                      ),
+                    ],
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      // Home
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                          );
+                        },
+                        child: const Icon(Icons.home_outlined, size: 28),
+                      ),
 
-  child: Row(
-  mainAxisAlignment: MainAxisAlignment.spaceAround,
-  children: [
-    GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
-      },
-      child: const Icon(Icons.home_outlined, size: 28),
-    ),
-    const Icon(Icons.menu_book_outlined, size: 28),
-    const Icon(Icons.person_outline, size: 28),
-    const Icon(Icons.dashboard_outlined, size: 28),
-    const Icon(Icons.access_time, size: 28),
-    const Icon(Icons.settings_outlined, size: 28),
-  ],
-),
+                      // Book
+                     const Icon(Icons.menu_book_outlined, size: 28),
 
-),
+                      // Profile
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DaftarPelanggan(),
+                            ),
+                          );
+                        },
+                        child: const Icon(Icons.person_outline, size: 28),
+                      ),
+
+                      // Dashboard
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DashboardScreen(),
+                            ),
+                          );
+                        },
+                        child: const Icon(Icons.dashboard_outlined, size: 28),
+                      ),
+
+                      // History / Time
+                     GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LaporanKasir(),
+                            ),
+                          );
+                        },
+                       child:  const Icon(Icons.access_time, size: 28),
+                     ),
+                        GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SettingsPage(),
+                            ),
+                          );
+                        },
+                        child: const Icon(Icons.settings_outlined, size: 28),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ],
@@ -203,93 +254,102 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // BAR CHART
   // ------------------------------------------------------------
   Widget _buildBarChart() {
-  return Container(
-    margin: const EdgeInsets.only(right: 10),
-    decoration: BoxDecoration(
-      color: const Color(0xFF2F4A2F), // hijau gelap seperti gambar
-      borderRadius: BorderRadius.circular(14),
-    ),
-    padding: const EdgeInsets.all(12),
-    child: BarChart(
-      BarChartData(
-        minY: 0,
-        maxY: 6,
-        gridData: const FlGridData(show: false),
-        borderData: FlBorderData(show: false),
+    return Container(
+      margin: const EdgeInsets.only(right: 10),
+      decoration: BoxDecoration(
+        color: const Color(0xFF2F4A2F), // hijau gelap seperti gambar
+        borderRadius: BorderRadius.circular(14),
+      ),
+      padding: const EdgeInsets.all(12),
+      child: BarChart(
+        BarChartData(
+          minY: 0,
+          maxY: 6,
+          gridData: const FlGridData(show: false),
+          borderData: FlBorderData(show: false),
 
-        titlesData: FlTitlesData(
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              interval: 1,
-              getTitlesWidget: (value, meta) => Text(
-                value.toInt().toString(),
-                style: const TextStyle(color: Colors.white, fontSize: 12),
+          titlesData: FlTitlesData(
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                interval: 1,
+                getTitlesWidget: (value, meta) => Text(
+                  value.toInt().toString(),
+                  style: const TextStyle(color: Colors.white, fontSize: 12),
+                ),
+                reservedSize: 20,
               ),
-              reservedSize: 20,
+            ),
+            rightTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            topTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                interval: 1,
+                getTitlesWidget: (value, meta) {
+                  const labels = [
+                    "cabe",
+                    "gula",
+                    "wortel",
+                    "penyedap",
+                    "kunir",
+                  ];
+                  if (value.toInt() < labels.length) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        labels[value.toInt()],
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                        ),
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                },
+              ),
             ),
           ),
-          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
 
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              interval: 1,
-              getTitlesWidget: (value, meta) {
-                const labels = ["cabe", "gula", "wortel", "penyedap", "kunir"];
-                if (value.toInt() < labels.length) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Text(
-                      labels[value.toInt()],
-                      style: const TextStyle(color: Colors.white, fontSize: 11),
-                    ),
-                  );
-                }
-                return const SizedBox();
-              },
-            ),
-          ),
-        ),
+          barGroups: List.generate(5, (i) {
+            final tinggi = [4, 5, 6, 4, 3][i].toDouble();
 
-        barGroups: List.generate(5, (i) {
-          final tinggi = [4, 5, 6, 4, 3][i].toDouble();
+            return BarChartGroupData(
+              x: i,
+              barRods: [
+                BarChartRodData(
+                  toY: tinggi,
+                  width: 22,
+                  borderRadius: BorderRadius.circular(20),
 
-          return BarChartGroupData(
-            x: i,
-            barRods: [
-              BarChartRodData(
-                toY: tinggi,
-                width: 22,
-                borderRadius: BorderRadius.circular(20),
+                  // efek batang kaca
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      Colors.white.withOpacity(0.25),
+                      Colors.white.withOpacity(0.65),
+                    ],
+                  ),
 
-                // efek batang kaca
-                gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  colors: [
-                    Colors.white.withOpacity(0.25),
-                    Colors.white.withOpacity(0.65),
+                  // lingkaran putih di atas batang
+                  rodStackItems: [
+                    BarChartRodStackItem(tinggi - 0.1, tinggi, Colors.white),
                   ],
                 ),
-
-                // lingkaran putih di atas batang
-                rodStackItems: [
-                  BarChartRodStackItem(
-                    tinggi - 0.1,
-                    tinggi,
-                    Colors.white,
-                  )
-                ],
-              ),
-            ],
-          );
-        }),
+              ],
+            );
+          }),
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   // ------------------------------------------------------------
   // LINE CHART
@@ -535,36 +595,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ],
         ),
-       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween, // sesuaikan jika mau spasi otomatis
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center, // ikon & teks vertikal center
-            crossAxisAlignment: CrossAxisAlignment.center, // horizontal center
-            children: [
-              Icon(icon, size: 28, color: Colors.black),
-              const SizedBox(height: 4), // jarak antara ikon & teks
-              Text(
-                title,
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                ),
-                ],
-                ),
-                const Spacer(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment
+              .spaceBetween, // sesuaikan jika mau spasi otomatis
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment:
+                  MainAxisAlignment.center, // ikon & teks vertikal center
+              crossAxisAlignment:
+                  CrossAxisAlignment.center, // horizontal center
+              children: [
+                Icon(icon, size: 28, color: Colors.black),
+                const SizedBox(height: 4), // jarak antara ikon & teks
                 Text(
-                  value,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  title,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
                   ),
-                  const SizedBox(width: 10),
-                  Icon(
-                    expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                    size: 26,
-                    )
-                    ],
-                    ),
-                     ),
-                     );}
+                ),
+              ],
+            ),
+            const Spacer(),
+            Text(
+              value,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(width: 10),
+            Icon(
+              expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+              size: 26,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   // ------------------------------------------------------------
   // LIST CUSTOMER
